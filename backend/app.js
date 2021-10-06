@@ -30,6 +30,9 @@ app.use((req, res, next) => {
     next();
   });
 
+//middleware global, transforme le corps de la requete en objet javascript utilisable
+app.use(express.json());
+
 // enregistrement du routeur avec racine attendue par front-end
 app.use('/api/auth', userRoutes);
 
