@@ -15,10 +15,14 @@ dépendances à installer :
 - NodeJS 12.14 or 14.0.+
 - Angular CLI 7.0.2.+
 - node-sass
+backend :
+- dotenv package
+- mongoose
+- Express
 
 1. Cloner le dépôt
 2. Dans le dossier front-end "Web-Developer-P6" : run `npm install` et `npm install --save-dev run-script-os` puis Run `npm start` (voir README frontend)
-3. Dans le dossier backend : `npm install -g nodemon` + run `nodemon server`
+3. Dans le dossier backend : run `npm start`
 
 
 ## Technologies & frameworks utilisés
