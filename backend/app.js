@@ -10,7 +10,7 @@ const path = require('path');
 const config = require('./config.js');
 
 //import des router
-
+const userRoutes = require('./routes/user');
 
 // création de l'application express
 const app = express();
@@ -30,6 +30,8 @@ app.use((req, res, next) => {
     next();
   });
 
+// enregistrement du routeur avec racine attendue par front-end
+app.use('/api/auth', userRoutes);
 
 //export de l'application
 module.exports = app;

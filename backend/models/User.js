@@ -1,3 +1,5 @@
+//----------------------- fichier contenant le modèle de données de l'Utilisateur -----------------------// 
+
 // import mongoose
 const mongoose = require('mongoose');
 // import de l'unique validator
