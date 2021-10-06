@@ -4,6 +4,12 @@
 const http = require('http');
 // import de l'application
 const app = require('./app');
+// import fichier config
+const config = require('./config.js');
+
+
+// affiche l'environnement de developpement
+console.log(`NODE_ENV=${config.NODE_ENV}`);
 
 // fonction qui renvoi un port valide, qu'il soit fourni sous forme d'un numéro ou d'une chaine
 const normalizePort = val => {
@@ -17,7 +23,7 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(config.PORT);
 app.set('port', port);
 
 // fonction qui recherche les différentes erreurs et les gère de manière appropriée
@@ -52,6 +58,6 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
-server.listen(port);
 
+server.listen(port);
 
