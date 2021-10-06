@@ -2,8 +2,6 @@
 
 // import Express
 const express = require('express');
-// import du package body-parser pour extraire l'objet JSON des demandes POST
-const bodyParser = require('body-parser');
 // import de mongoose
 const mongoose = require('mongoose');
 // import path, donne accès au chemin de notre système de fichier
@@ -31,11 +29,6 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
   });
-
-//middleware global, transforme le corps de la requete en objet javascript utilisable
-// à partir de ce middleware on a acces au corps de la requête
-app.use(bodyParser.json());
-
 
 
 //export de l'application
