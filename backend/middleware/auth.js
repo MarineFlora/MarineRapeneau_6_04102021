@@ -1,3 +1,5 @@
+//----------------------- configuration protégeant les routes et vérifiant l'authentification avant envoi requêtes -----------------------// 
+
 // import jwt (verification tokens)
 const jwt = require('jsonwebtoken');
 //import fichier de config

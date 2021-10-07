@@ -1,3 +1,5 @@
+//----------------------- configuration pour gerer fichiers entrants dans les requêtes http -----------------------// 
+
 // import de multer
 const multer = require('multer');
 
