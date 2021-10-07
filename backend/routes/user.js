@@ -4,6 +4,7 @@
 const express = require('express');
 // creation du routeur
 const router = express.Router();
+
 // import du controller user
 const userCtrl = require('../controllers/user');
 
