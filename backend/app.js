@@ -12,6 +12,7 @@ const config = require('./config.js');
 //import des router
 const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
+// route like
 
 // création de l'application express
 const app = express();
@@ -23,7 +24,7 @@ mongoose.connect(`mongodb+srv://${config.MONGO_DB_USERNAME}:${config.MONGO_DB_PA
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-// middleware pour résoudre problèmes de CORS et permettre à l'accès à l'API
+// middleware pour résoudre problèmes de CORS et permettre l'accès à l'API
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -33,6 +34,10 @@ app.use((req, res, next) => {
 
 //middleware global, transforme le corps de la requete en objet javascript utilisable
 app.use(express.json());
+
+// indique à Express qu'il faut gerer la ressource images de manière statique à chaque requête reçue vers la route /images
+// __dirname = nom du dossier dans lequel on va se trouver
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // enregistrement du routeur avec racine attendue par front-end
 app.use('/api/auth', userRoutes);
