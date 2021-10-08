@@ -11,6 +11,7 @@ const config = require('./config.js');
 
 //import des router
 const userRoutes = require('./routes/user');
+const saucesRoutes = require('./routes/sauces');
 
 // création de l'application express
 const app = express();
@@ -35,6 +36,7 @@ app.use(express.json());
 
 // enregistrement du routeur avec racine attendue par front-end
 app.use('/api/auth', userRoutes);
+app.use('/api/sauces', saucesRoutes);
 
 //export de l'application
 module.exports = app;

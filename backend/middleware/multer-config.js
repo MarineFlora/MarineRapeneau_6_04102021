@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
         const name = file.originalname.split(' ').join('_');
         // on ajoute une extension au fichier : élement de notre dictionnaire qui correspond au format du fichier envoyé par le frontend
         const extension = MIME_TYPES[file.mimetype];
-        // on appelle la callback, on ajoute nom + un timestamp(=format date sous forme d'entier comptant les milisecondes, permet d'avoir un nom de fichier unique) + un '.' + l'extension
+        // on appelle la callback, on ajoute nom + un timestamp(=format date sous forme d'entier comptant les milisecondes, nom de fichier unique) + un '.' + l'extension
         callback(null, name + Date.now() + '.' + extension);
     }
 });
