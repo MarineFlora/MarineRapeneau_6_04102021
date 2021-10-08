@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 // création schema de données d'une Sauce, contient champs souhaités pour chaque Sauce
 // indique le type et le caractère obligatoire ou non pour chaque attribut de l'objet
 const sauceSchema = mongoose.Schema({
-    userId: { type: String, required: true, unique: true },
+    userId: { type: String, required: true },
     name: { type: String, required: true },
     manufacturer: { type: String, required: true },
     description: { type: String, required: true },
