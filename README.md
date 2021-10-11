@@ -17,17 +17,18 @@ dépendances à installer :
 - node-sass
 
 1. Cloner le dépôt
-2. Dans le dossier front-end "Web-Developer-P6" : run `npm install` et `npm install --save-dev run-script-os` puis Run `npm start` (voir README frontend)
-3. Dans le dossier backend : 
+- Dans le dossier front-end "Web-Developer-P6" : run `npm install` et `npm install --save-dev run-script-os` puis Run `npm start` (voir README frontend)
+
+2. Dans le dossier backend : 
 - creer un dossier images
 - creer un fichier development.env et un fichier production.env et y renseigner les variables d'environnement :
-    NODE_ENV=development ou production
-    HOST=localhost
-    PORT=3000
-    MONGO_DB_USERNAME=username de votre base de donnée
-    MONGO_DB_PASSWORD=mot de passe de votre base de donnée
-    MONGO_DB_NAME=nom de votre base de donnée
-    JWT_TOKEN_SECRET=votre token secret
+    - NODE_ENV=development ou production
+    - HOST=localhost
+    - PORT=3000
+    - MONGO_DB_USERNAME=username de votre base de donnée
+    - MONGO_DB_PASSWORD=mot de passe de votre base de donnée
+    - MONGO_DB_NAME=nom de votre base de donnée
+    - JWT_TOKEN_SECRET=votre token secret
 - run `npm install` puis run `npm start` ou `npm run dev`
 
 
