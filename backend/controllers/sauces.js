@@ -41,7 +41,7 @@ exports.modifySauce = (req, res, next) => {
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` 
         // s'il n'existe pas, on traite l'objet entrant: corps de la requête
         } : { ...req.body };
-    // methode updateOne pour mettre à jour la sauce, on compare
+    // methode updateOne pour mettre à jour la sauce dans la base de donnée, on compare
     // 1er argument : la sauce choisie, celle avec l'id envoyée dans la requête 
     // 2ème argument : nouvelle version de la sauce : celle modifiée renvoyée dans la requête, en modifiant l'id pour qu'il correspondant à celui des paramètres de requêtes
     Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
@@ -52,7 +52,7 @@ exports.modifySauce = (req, res, next) => {
 
 // suppression d'une sauce par son id
 exports.deleteSauce = (req, res, next) => {
-    // on va chercher le fichier qui a l'id qui correspond à celui dans les parametres de la requete
+    // on va chercher la sauce qui a l'id qui correspond à celui dans les parametres de la requete
     Sauce.findOne({ _id: req.params.id })
         // quand on trouve la sauce
         .then(sauce => {

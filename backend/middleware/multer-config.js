@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
     // fonction qui indique quel nom de fichier utiliser
     filename: (req, file, callback) => {
         // on génere le nouveau nom pour le fichier
-        // on élmine les espaces en les remplacant par des underscore pour éviter erreurs aevc split et join
+        // on élmine les espaces en les remplacant par des underscore pour éviter erreurs avec split et join
         const name = file.originalname.split(' ').join('_');
         // on ajoute une extension au fichier : élement de notre dictionnaire qui correspond au format du fichier envoyé par le frontend
         const extension = MIME_TYPES[file.mimetype];

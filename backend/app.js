@@ -12,7 +12,7 @@ const config = require('./config.js');
 //import des router
 const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
-// route like
+const likeRoutes = require('./routes/like');
 
 // création de l'application express
 const app = express();
@@ -42,6 +42,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // enregistrement du routeur avec racine attendue par front-end
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', saucesRoutes);
+app.use('/api/sauces', likeRoutes);
 
 //export de l'application
 module.exports = app;
