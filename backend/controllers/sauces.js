@@ -27,12 +27,27 @@ exports.createSauce = (req, res, next) => {
         // on renvoi un code 201 pour une bonne création de ressource
         .then(() => res.status(201).json({ message: 'Sauce enregistrée !' }))
         // on récupère l'erreur avec un code 400
-        .catch(error => res.status(400).json({ error })); 
+        .catch(error => { console.log(error); res.status(400).json({ message: error }) })
 };
 
 // modification d'une sauce par son id
 exports.modifySauce = (req, res, next) => {
-
+    // on utilise operateur ternaire ? pour savoir si le fichier image a été modifié
+    const sauceObject = req.file ?
+        // S'il existe, on traite la nouvelle image
+        { // on récupère les chaines de caractères qui sont dans la requête et on parse en objet 
+            ...JSON.parse(req.body.sauce),
+            // on modifie l'url de l'image
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` 
+        // s'il n'existe pas, on traite l'objet entrant: corps de la requête
+        } : { ...req.body };
+    // methode updateOne pour mettre à jour la sauce, on compare
+    // 1er argument : la sauce choisie, celle avec l'id envoyée dans la requête 
+    // 2ème argument : nouvelle version de la sauce : celle modifiée renvoyée dans la requête, en modifiant l'id pour qu'il correspondant à celui des paramètres de requêtes
+    Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
+        // envoi réponse en promise + error
+        .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
+        .catch(error => res.status(400).json({ error }));
 };
 
 // suppression d'une sauce par son id
