@@ -12,16 +12,17 @@ const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 
 // Routes avec action CRUD disponibles, avec leur endpoints, les middleware utilisés et leur fonction
-// récupération (lecture) toutes les sauces
-router.get('/', auth, saucesCtrl.getAllSauces);
-// récupération (lecture) une sauce selon son id (id automatique de mongoose)
-router.get('/:id', auth, saucesCtrl.getOneSauce);
 // création d'une sauce
 router.post('/', auth, multer, saucesCtrl.createSauce);
 // modification d'une sauce
 router.put('/:id', auth, multer, saucesCtrl.modifySauce);
 // suppression d'une sauce
 router.delete('/:id', auth, saucesCtrl.deleteSauce);
+// récupération (lecture) toutes les sauces
+router.get('/', auth, saucesCtrl.getAllSauces);
+// récupération (lecture) une sauce selon son id (id automatique de mongoose)
+router.get('/:id', auth, saucesCtrl.getOneSauce);
+
 
 
 // export des routes
