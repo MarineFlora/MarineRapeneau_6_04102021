@@ -1,4 +1,4 @@
-//----------------------- fichier présentant les routes disponibles, à quel endpoint et leur fonction -----------------------// 
+//----------------------- fichier présentant les routes user disponibles, à quel endpoint et leur fonction -----------------------// 
 
 // import express
 const express = require('express');
