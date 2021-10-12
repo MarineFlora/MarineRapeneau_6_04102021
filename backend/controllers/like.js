@@ -7,7 +7,6 @@ const Sauce = require('../models/Sauce');
 exports.likeStatus = (req, res, next) => {
     const like = req.body.like;
     const userId = req.body.userId;
-    console.log(userId); // null/undefined sur Postman
 
     // on va chercher la sauce selectionnée
     Sauce.findOne({ _id: req.params.id })
@@ -29,6 +28,12 @@ exports.likeStatus = (req, res, next) => {
                     } else {
                         // si l'utilisateur a déjà liké, on envoi une erreur
                         throw new Error('un seul like possible!');
+                    } 
+                     // si l'utilisateur avait déjà fait un dislike, le supprimer pour pouvoir ajouter le like à la place
+                    if (userDislike) {
+                       // throw new Error('annuler votre dislike avant de liker!');
+                        sauce.dislikes -= 1;
+                        sauce.usersDisliked = sauce.usersDisliked.filter(id => id !== userId);
                     }
                 break;
 
@@ -42,10 +47,12 @@ exports.likeStatus = (req, res, next) => {
                     }
                     // si l'uitlisateur a déjà disliké, 
                     // on retire le dislike et le userId du tableau
-                    else if (userDislike) {
+                    else {
+                      //let userDisliked = sauce.usersDisliked.find(id => id === userId);
+                        if (userDislike) {
                         sauce.dislikes -= 1;
                         sauce.usersDisliked = sauce.usersDisliked.filter(id => id !== userId);
-                    }
+                    } }
                 break;
 
                 // si like = -1, l'utilisateur n'aime pas
@@ -58,9 +65,14 @@ exports.likeStatus = (req, res, next) => {
                     } else {
                         // si l'utilisateur a déjà disliké, on envoi une erreur
                         throw new Error('un seul dislike possible!');
-                    }
+                    } 
+                    // si l'utilisateur avait déjà fait un like, le supprimer pour pouvoir ajouter le dislike à la place
+                    if (userLike) {
+                        // throw new Error('annuler votre like avant de disliker!');
+                         sauce.likes -= 1;
+                         sauce.usersLiked = sauce.usersLiked.filter(id => id !== userId);
+                     }
             }
-
             // sauvegarde la sauce avec like/dislike modifiés
             sauce.save()
                 .then(() => res.status(201).json({ message: 'préférence enregistrée !' }))
