@@ -53,8 +53,8 @@ exports.modifySauce = (req, res, next) => {
             // si le fichier image n'existe pas, on traite les autres élements du corps de la requête
             } : { ...req.body };
 
-            // si l'userId contenu dans la sauce est le même que celui du token de connexion : autorisation
-            if (sauce.userId === req.token.userId) {
+            // si l'userId de la sauce modifiée est le même que l'userId de la sauce avant modification
+            if (sauceObject.userId === sauce.userId) {
                 // mettre à jour la sauce dans la base de donnée, on compare
                 // 1er argument : la sauce choisie, celle avec l'id envoyée dans la requête 
                 // 2ème argument : nouvelle version de la sauce : celle modifiée renvoyée dans la requête, en modifiant l'id pour qu'il correspondant à celui des paramètres de requêtes
