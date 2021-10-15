@@ -21,53 +21,80 @@ exports.createSauce = (req, res, next) => {
         // par : "protocole, http/https"://"racineduserveur(localhost:3000)"/images/nomfichier(configuré par multer)
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` 
    });
-   // Enregistrement de la sauce dans la base de données
-   // retourne une promise
-    sauce.save()
-        // on renvoi un code 201 pour une bonne création de ressource
-        .then(() => res.status(201).json({ message: 'Sauce enregistrée !' }))
-        // on récupère l'erreur avec un code 400
-        .catch(error => { console.log(error); res.status(400).json({ message: error }) })
+
+    // empêcher utilisateur de creer une sauce avec l'userId de quelqu'un d'autre
+    // si le userId de la sauce est le même que celui du token de connexion
+    if (sauce.userId === req.token.userId) {
+    // Enregistrement de la sauce dans la base de données
+        sauce.save()
+            // on renvoi un code 201 pour une bonne création de ressource
+            .then(() => res.status(201).json({ message: 'Sauce enregistrée !' }))
+            // on récupère l'erreur avec un code 400
+            .catch(error => { res.status(400).json({ message: error }) })
+        }
+    else {
+        res.status(401).json({ error: "userId non valable" });
+    }
 };
 
 // modification d'une sauce par son id
 exports.modifySauce = (req, res, next) => {
-    // on utilise operateur ternaire ? pour savoir si le fichier image a été modifié
-    const sauceObject = req.file ?
-        // S'il existe, on traite la nouvelle image
-        { // on récupère les chaines de caractères qui sont dans la requête et on parse en objet 
-            ...JSON.parse(req.body.sauce),
-            // on modifie l'url de l'image
-            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` 
-        // s'il n'existe pas, on traite l'objet entrant: corps de la requête
-        } : { ...req.body };
-    // methode updateOne pour mettre à jour la sauce dans la base de donnée, on compare
-    // 1er argument : la sauce choisie, celle avec l'id envoyée dans la requête 
-    // 2ème argument : nouvelle version de la sauce : celle modifiée renvoyée dans la requête, en modifiant l'id pour qu'il correspondant à celui des paramètres de requêtes
-    Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
-        // envoi réponse en promise + error
-        .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
-        .catch(error => res.status(400).json({ error }));
+    Sauce.findOne({ _id: req.params.id })
+        // cette sauce est retournée dans une promise et envoyée au front-end
+        .then((sauce) => {
+            // on récupère les informations modifiées de la sauce dans la constante sauceObject
+            // on utilise operateur ternaire "?" pour savoir si un fichier image a été ajouté à la requête
+            const sauceObject = req.file ?
+            // Si le fichier image existe, on traite les strings et la nouvelle image
+            { // on récupère les chaines de caractères qui sont dans la requête et on parse en objet 
+                ...JSON.parse(req.body.sauce), 
+                // on modifie l'url de l'image
+                imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+            // si le fichier image n'existe pas, on traite les autres élements du corps de la requête
+            } : { ...req.body };
+
+            // si l'userId contenu dans la sauce est le même que celui du token de connexion : autorisation
+            if (sauce.userId === req.token.userId) {
+                // mettre à jour la sauce dans la base de donnée, on compare
+                // 1er argument : la sauce choisie, celle avec l'id envoyée dans la requête 
+                // 2ème argument : nouvelle version de la sauce : celle modifiée renvoyée dans la requête, en modifiant l'id pour qu'il correspondant à celui des paramètres de requêtes
+                Sauce.updateOne({ _id: req.params.id}, { ...sauceObject, _id: req.params.id})
+                .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
+                .catch(error => res.status(400).json({ error }));  
+            } 
+            // si les userId ne correspondent pas, on envoi une erreur 401 unauthorized
+            else {
+                res.status(401).json({ error: "vous n'êtes pas autorisé à modifier cette sauce" });
+            }
+        })
+        // si aucune sauce trouvée, on envoi erreur
+        .catch(error => res.status(500).json({ error }));    
 };
 
 // suppression d'une sauce par son id
 exports.deleteSauce = (req, res, next) => {
-    // on va chercher la sauce qui a l'id qui correspond à celui dans les parametres de la requete
+    // on va chercher la sauce qui a l'id correspondent à celui dans les parametres de la requete
     Sauce.findOne({ _id: req.params.id })
         // quand on trouve la sauce
         .then(sauce => {
-            // on extrait le nom du fichier à supprimer
-            // split retourne un tableau de 2 elements : tout ce qui vient avant '/images/' et tout ce qui vient apres '/images/'=nom du fichier, on recupère le 2ème élement
-            const filename = sauce.imageUrl.split('/images/')[1];
-            // on supprime le fichier avec fs.unlink
-            // 1er arg: chemin du fichier, 2e arg: la callback=ce qu'il faut faire une fois le fichier supprimé
-            fs.unlink(`images/${filename}`, () => {
-                // on supprime la sauce de la base de donnée en indiquant son id
-                // pas besoin de 2e arg car suppression
-                Sauce.deleteOne({ _id: req.params.id })
-                    .then(() => res.status(200).json({ message: 'Sauce supprimée !'}))
-                    .catch(error => res.status(400).json({ error }));
-            });
+            // empêcher utilisateur de supprimer une sauce qui ne lui appartient pas
+            // si le userId de la sauce est le même que celui du token de connexion
+            if (sauce.userId === req.token.userId) {
+                // on extrait le nom du fichier à supprimer
+                // split retourne un tableau de 2 elements : tout ce qui vient avant '/images/' et tout ce qui vient apres '/images/'=nom du fichier, on recupère le 2ème élement
+                const filename = sauce.imageUrl.split('/images/')[1];
+                // la methode fs.unlink va supprimer l'image du chemin local et dans la base de donnée
+                // 1er arg: chemin du fichier, 2e arg: la callback=ce qu'il faut faire une fois le fichier supprimé
+                fs.unlink(`images/${filename}`, () => {
+                    // on supprime la sauce de la base de donnée en indiquant son id
+                    // pas besoin de 2e arg car suppression
+                    Sauce.deleteOne({ _id: req.params.id })
+                        .then(() => res.status(200).json({ message: 'Sauce supprimée !'}))
+                        .catch(error => res.status(400).json({ error }));
+                });
+            } else {
+                res.status(401).json({ error: "vous n'êtes pas autorisé à supprimer cette sauce" });
+            }
         })
         .catch(error => res.status(500).json({ error }));
 };
@@ -79,7 +106,7 @@ exports.getAllSauces = (req, res, next) => {
     Sauce.find()
         // on récupère le tableau de toutes les sauces retournées dans la base données
         .then(sauces => res.status(200).json(sauces))
-        .catch(error => res.status(400).json({ error }));
+        .catch(error => res.status(404).json({ error }));
 };
 
 // récupération d'une sauce par son id 
