@@ -8,7 +8,7 @@ L'API doit être construite selon des pratiques de code sécurisées.
 
 Le front-end est fourni.
 
-Status : en cours de réalisation
+Status : terminé
 
 ## Installation
 dépendances à installer : 
@@ -34,8 +34,8 @@ dépendances à installer :
 
 ## Technologies & frameworks utilisés
 - Javascript
-- Express
-- MongoDB et Mongoose
+- API REST Node.js / Express
+- MongoDB
 
 
 
