@@ -29,11 +29,9 @@ exports.likeStatus = (req, res, next) => {
                         // si l'utilisateur a déjà liké, on envoi une erreur
                         throw new Error('un seul like possible!');
                     } 
-                     // si l'utilisateur avait déjà fait un dislike, le supprimer pour pouvoir ajouter le like à la place
+                     // si l'utilisateur avait déjà fait un dislike, message erreur
                     if (userDislike) {
-                       // throw new Error('annuler votre dislike avant de liker!');
-                        sauce.dislikes -= 1;
-                        sauce.usersDisliked = sauce.usersDisliked.filter(id => id !== userId);
+                        throw new Error('annuler votre dislike avant de liker!');
                     }
                 break;
 
@@ -52,7 +50,8 @@ exports.likeStatus = (req, res, next) => {
                         if (userDislike) {
                         sauce.dislikes -= 1;
                         sauce.usersDisliked = sauce.usersDisliked.filter(id => id !== userId);
-                    } }
+                        }   
+                    }
                 break;
 
                 // si like = -1, l'utilisateur n'aime pas
@@ -66,12 +65,10 @@ exports.likeStatus = (req, res, next) => {
                         // si l'utilisateur a déjà disliké, on envoi une erreur
                         throw new Error('un seul dislike possible!');
                     } 
-                    // si l'utilisateur avait déjà fait un like, le supprimer pour pouvoir ajouter le dislike à la place
+                    // si l'utilisateur avait déjà fait un like, message erreur
                     if (userLike) {
-                        // throw new Error('annuler votre like avant de disliker!');
-                         sauce.likes -= 1;
-                         sauce.usersLiked = sauce.usersLiked.filter(id => id !== userId);
-                     }
+                        throw new Error('annuler votre like avant de disliker!');
+                    }
             }
             // sauvegarde la sauce avec like/dislike modifiés
             sauce.save()
