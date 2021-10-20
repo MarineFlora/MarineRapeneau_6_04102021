@@ -21,7 +21,7 @@ dépendances à installer :
 
 2. Dans le dossier backend : 
 - creer un dossier images
-- creer un fichier development.env et un fichier production.env et y renseigner les variables d'environnement :
+- creer un fichier development.env et un fichier production.env et y renseigner les variables d'environnement selon l'environnement dans lequel on se trouve:
     - NODE_ENV=development ou production
     - HOST=localhost
     - PORT=3000
@@ -29,7 +29,9 @@ dépendances à installer :
     - MONGO_DB_PASSWORD=mot de passe de votre base de donnée
     - MONGO_DB_NAME=nom de votre base de donnée
     - JWT_TOKEN_SECRET=votre token secret
-- run `npm install` puis run `npm start` ou `npm run dev`
+- run `npm install` puis 
+run `npm start` ou `npm run dev` si environnement de développement 
+`npm run production` si environnement de production
 
 
 ## Technologies & frameworks utilisés
