@@ -8,6 +8,11 @@ L'API doit être construite selon des pratiques de code sécurisées.
 
 Le front-end est fourni.
 
+Compétences développées :        
+➡ Implémenter un modèle logique de données conformément à la réglementation   
+➡ Stocker des données de manière sécurisée   
+➡ Mettre en œuvre des opérations CRUD de manière sécurisée   
+
 Status : terminé
 
 ## Installation
